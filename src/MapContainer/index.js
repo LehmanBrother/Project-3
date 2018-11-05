@@ -1,40 +1,29 @@
 import React, { Component } from 'react';
-import { Map, maps, GoogleApiWrapper, google } from 'google-maps-react';
-
-import Key from '../api_key';
+import {Map, Polygon, GoogleApiWrapper} from 'google-maps-react';
+import Key from '../api_key'; 
 
 export class MapContainer extends Component {
-  constructor(){
-    super();
-    this.state = {
-      
-    }
-  }
-  itsAlive = () => {
-    console.log(`it's alive!`);
-  }
-  loadMapShapes = () => {
-      console.log(`this works!`);
-      maps.data.loadGeoJson('https://storage.googleapis.com/mapsdevsite/json/states.js', 
-        { idPropertyName: 'STATE' }
-      );
-
-  }
-  componentDidMount(){
-    this.loadMapShapes();
-  }
   render() {
+    const triangleCoords = [
+      {lat: 25.774, lng: -80.190},
+      {lat: 18.466, lng: -66.118},
+      {lat: 32.321, lng: -64.757},
+      {lat: 25.774, lng: -80.190}
+    ];
     return (
+      <Map 
+        google={this.props.google} 
+        zoom={14}>
 
-        <Map google={this.props.google} 
-          initialCenter={{
-            lat: 41.878, 
-            lng: -87.629
-          }}
-          zoom={14}
-        >
-        </Map>
+        <Polygon
+          paths={triangleCoords}
+          strokeColor="#0000FF"
+          strokeOpacity={0.8}
+          strokeWeight={2}
+          fillColor="#0000FF"
+          fillOpacity={0.35} />
 
+      </Map>
     );
   }
 }
