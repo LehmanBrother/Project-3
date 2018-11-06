@@ -7,33 +7,49 @@ export class MapContainer extends Component {
   constructor(){
     super();
     this.state = {
-      stateCoord: []
+      states: []
     }
   }
   whatsUp = () => {
     console.log('whaddup');
   }
-  getCoordinates = async () => {
+  getCoordinates = async (feature) => {
     let coordinateArr = [];
-    coordinates.features[0].geometry.coordinates[0].forEach((elem) => {
+    feature.geometry.coordinates[0].map((elem) => {
       let coordPair = {
         lat: elem[1],
         lng: elem[0]
       }
       coordinateArr.push(coordPair);
     });
-    console.log(coordinateArr, '<------- coordArr');
+    console.log(coordinateArr, '<------- getCoordinates ');
     return coordinateArr
   }
+  getAllStatesCoordinates = async () => {
+    //coordinates are in an array of an array of an array
+    //this converts them into an array of objects for each state
+    const allStates = [];
+    coordinates.features.map((feature) => {
+      let oneState ={
+        name: feature.properties.NAME,
+        coords: []
+      };
+      this.getCoordinates(feature).then((state) => {
+        oneState.coords.push(state)
+      });
+      allStates.push(oneState);
+    });
+    return allStates
+  }
   componentDidMount(){
-    this.getCoordinates().then((data) => {
-
-      this.setState({stateCoord: data})
-      console.log(this.state, '<------- alabama');
+    this.getAllStatesCoordinates().then((data) => {
+      this.setState({
+        states: data
+      });
+      console.log(this.state.states, '<--------- all coords');
     }).catch((err) => {
       console.log(err);
     });
-    console.log(coordinates, '<--------- all coords');
   }
   render() {
     return (
@@ -41,13 +57,7 @@ export class MapContainer extends Component {
         google={this.props.google} 
         zoom={14}>
         
-        <Polygon
-          paths={this.state.stateCoord}
-          strokeColor="#0000FF"
-          strokeOpacity={0.8}
-          strokeWeight={2}
-          fillColor="#0000FF"
-          fillOpacity={0.35} />
+        
 
       </Map>
     );
