@@ -6,25 +6,48 @@ import Key from '../api_key';
 export class MapContainer extends Component {
   constructor(){
     super();
-    this.state = {}
+    this.state = {
+      stateCoord: []
+    }
+  }
+  whatsUp = () => {
+    console.log('whaddup');
+  }
+  getCoordinates = async () => {
+    let coordinateArr = [];
+    coordinates.features[0].geometry.coordinates[0].forEach((elem) => {
+      let coordPair = {
+        lat: elem[1],
+        lng: elem[0]
+      }
+      coordinateArr.push(coordPair);
+    });
+    console.log(coordinateArr, '<------- coordArr');
+    return coordinateArr
   }
   componentDidMount(){
-    console.log(coordinates.features[0].geometry.coordinates[0]);
+    this.getCoordinates().then((data) => {
+
+      this.setState({stateCoord: data})
+      console.log(this.state, '<------- alabama');
+    }).catch((err) => {
+      console.log(err);
+    });
+    console.log(coordinates, '<--------- all coords');
   }
   render() {
     return (
       <Map 
         google={this.props.google} 
         zoom={14}>
-
+        
         <Polygon
-          path={coordinates.features[0].geometry.coordinates[0]}
+          paths={this.state.stateCoord}
           strokeColor="#0000FF"
           strokeOpacity={0.8}
           strokeWeight={2}
           fillColor="#0000FF"
           fillOpacity={0.35} />
-    
 
       </Map>
     );
