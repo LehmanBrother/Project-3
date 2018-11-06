@@ -18,17 +18,17 @@ class App extends Component {
         code: 0
       },
       currentGeoShow: '',//this will determine whether StateContainer shows state or place
-      userStates: []
+      userStates: [],
+      userPlaces: []
     }
   }
 
   //gets all states + relevant info for intiial seed
-  getAllStates = async () => {
+  getUserStates = async () => {
     try {
-      const allStates = await fetch(baseEndPoint + 'GEONAME,POP,DENSITY&for=state');
-      console.log(allStates);
-      const allStatesJson = await allStates.json();
-      console.log(allStatesJson);
+      const userStates = await fetch('http://localhost:9000/api/v1/census/states');
+      const userStatesJson = await userStates.json();
+      return userStatesJson.data;
     } catch(err) {
       console.log(err);
     }
@@ -82,13 +82,18 @@ class App extends Component {
 
   componentDidMount(){
     console.log('cdm');
-    //this.getAllStates();
+    this.getUserStates().then((userStates) => {
+      console.log(userStates, 'cdm userStates');
+      this.setState({userStates: userStates})
+    }).catch((err) => {
+      console.log(err);
+    })
   }
 
   render() {
     return (
       <div className="App">
-        <StateContainer currentState={this.state.currentState} saveState={this.saveState} />
+        <StateContainer currentState={this.state.currentState} userStates={this.state.userStates} saveState={this.saveState} />
         <SearchContainer geoSearch={this.geoSearch} />
       </div>
     );

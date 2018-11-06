@@ -8,6 +8,16 @@ class StateContainer extends Component {
 		}
 	}
 	render(){
+		console.log(this.props, 'stc this.props');
+		const userStates = this.props.userStates.map((userState, i) => {
+			return (
+				<li key={userState._id}>
+					<h5>{userState.name}</h5>
+					<p>Population: {userState.pop}</p>
+					<p>Density: {Math.round(10*userState.density)/10}/sq mi</p>
+				</li>
+			)
+		})
 		return (
 			<div>
 				<p>StateContainer</p>
@@ -20,6 +30,12 @@ class StateContainer extends Component {
 				<form onSubmit={this.props.saveState}>
 					<button type='Submit'>Save State</button>
 				</form>
+				<div>
+					<h3>Saved States</h3>
+					<ul>
+						{userStates}
+					</ul>
+				</div>
 			</div>
 		)
 	}
