@@ -17,7 +17,8 @@ class App extends Component {
         density: 0,
         code: 0
       },
-      currentGeoShow: '',//this will determine whether StateContainer shows state or place
+      currentPlaces: [],
+      showState: true,//this will determine whether StateContainer shows state or place
       userStates: [],
       userPlaces: []
     }
@@ -36,23 +37,45 @@ class App extends Component {
 
   geoSearch = async (search, e) => {
     e.preventDefault();
-    try {
-      const searchedGeo = await fetch('http://localhost:9000/api/v1/census/stateSearch/' + search.searchText);
-      const parsedResponse = await searchedGeo.json();
-      const censusState = await fetch(baseEndPoint + 'GEONAME,POP,DENSITY&for=state:' + parsedResponse.data[0].code)
-      const censusStateJson = await censusState.json();
-      this.setState({
-        //censusStateJson is an array that contains one dummy entry and one or more state entries, so we use [1]
-        currentState: {
-          name: censusStateJson[1][0],
-          pop: censusStateJson[1][1],
-          density: censusStateJson[1][2],
-          code: censusStateJson[1][3]
-        }
-      })
-      console.log(this.state);
-    } catch(err) {
-      console.log(err);
+    console.log(search.searchType, 'searchType');
+    await this.setState({
+      showState: search.searchType == 'State'
+    });
+    console.log(this.state.showState, 'showState');
+    if(this.state.showState) {
+      console.log('state woo');
+      try {
+        const searchedGeo = await fetch('http://localhost:9000/api/v1/census/stateSearch/' + search.searchText);
+        const parsedResponse = await searchedGeo.json();
+        const censusState = await fetch(baseEndPoint + 'GEONAME,POP,DENSITY&for=state:' + parsedResponse.data[0].code)
+        const censusStateJson = await censusState.json();
+        this.setState({
+          //censusStateJson is an array that contains one dummy entry and one or more state entries, so we use [1]
+          currentState: {
+            name: censusStateJson[1][0],
+            pop: censusStateJson[1][1],
+            density: censusStateJson[1][2],
+            code: censusStateJson[1][3]
+          }
+        })
+        console.log(this.state, 'after search');
+      } catch(err) {
+        console.log(err);
+      }
+    } else {
+      console.log('city woo');
+      try {
+        const searchedGeo = await fetch('http://localhost:9000/api/v1/census/placeSearch/' + search.searchText);
+        const parsedResponse = await searchedGeo.json();
+        console.log(parsedResponse.data, 'parsedResponse.data');
+        this.setState({
+          //array of all matching places
+          currentPlaces: parsedResponse.data
+        })
+        console.log(this.state, 'after search');
+      } catch(err) {
+        console.log(err);
+      }
     }
   }
 
@@ -99,7 +122,7 @@ class App extends Component {
   }
 
   componentDidMount(){
-    console.log('cdm');
+    console.log(this.state, 'cdm');
     this.getUserStates().then((userStates) => {
       console.log(userStates, 'cdm userStates');
       this.setState({userStates: userStates})
@@ -111,7 +134,13 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <StateContainer currentState={this.state.currentState} userStates={this.state.userStates} saveState={this.saveState} deleteState={this.deleteState} />
+        <StateContainer
+          currentState={this.state.currentState}
+          currentPlaces={this.state.currentPlaces}
+          showState={this.state.showState}
+          userStates={this.state.userStates}
+          saveState={this.saveState}
+          deleteState={this.deleteState} />
         <SearchContainer geoSearch={this.geoSearch} />
       </div>
     );

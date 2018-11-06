@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import CurrentStateContainer from '../CurrentStateContainer';
+import CurrentPlaceContainer from '../CurrentPlaceContainer';
 
 class StateContainer extends Component {
 	constructor(){
@@ -21,21 +23,24 @@ class StateContainer extends Component {
 		})
 		return (
 			<div>
-				<p>StateContainer</p>
-				<p>Current State:</p>
-				<ul>
-					<li>Name: {this.props.currentState.name}</li>
-					<li>Population: {this.props.currentState.pop}</li>
-					<li>Density: {Math.round(10*this.props.currentState.density)/10}/sq mi</li>
-				</ul>
-				<form onSubmit={this.props.saveState}>
-					<button type='Submit'>Save State</button>
-				</form>
 				<div>
-					<h3>Saved States</h3>
-					<ul>
-						{userStates}
-					</ul>
+					{this.props.showState ?
+						<CurrentStateContainer
+							currentState={this.props.currentState}
+							saveState={this.props.saveState} /> :
+						<CurrentPlaceContainer
+							currentPlaces={this.props.currentPlaces}//add savePlace
+							 />}
+					<h2>StateContainer</h2>
+					<div>
+						<h3>Saved States</h3>
+						<ul>
+							{userStates}
+						</ul>
+					</div>
+				</div>
+				<div>
+					<h2>PlaceContainer</h2>
 				</div>
 			</div>
 		)

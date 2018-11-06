@@ -17,7 +17,7 @@ class SearchContainer extends Component {
 		console.log(this.state);
 		return (
 			<div>
-				<p>SearchContainer</p>
+				<h2>SearchContainer</h2>
 				<form onSubmit={this.props.geoSearch.bind(null, this.state)}>
 					<label>
 						Search Type: 
