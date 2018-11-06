@@ -15,7 +15,9 @@ class CurrentPlaceContainer extends Component {
 					<h5>{place.name}</h5>
 					<p>Population: {place.pop}</p>
 					<p>Density: {Math.round(10*place.density)/10}/sq mi</p>
-					<button>Save City</button>
+					<form onSubmit={this.props.savePlace.bind(null,place)}>
+						<button type='Submit'>Save City</button>
+					</form>
 				</li>
 			)
 		})

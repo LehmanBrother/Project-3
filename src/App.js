@@ -35,6 +35,18 @@ class App extends Component {
     }
   }
 
+  //add getUserPlaces
+  getUserPlaces = async () => {
+    try {
+      console.log('getUserPlaces called');
+      const userPlaces = await fetch('http://localhost:9000/api/v1/census/places');
+      const userPlacesJson = await userPlaces.json();
+      return userPlacesJson.data;
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
   geoSearch = async (search, e) => {
     e.preventDefault();
     console.log(search.searchType, 'searchType');
@@ -103,6 +115,24 @@ class App extends Component {
     }
   }
 
+  savePlace = async (place, e) => {
+    e.preventDefault();
+    console.log('savePlace called');
+    console.log(place, 'place');
+    try {
+      const savedPlace = await fetch('http://localhost:9000/api/v1/census/place', {
+        method: 'POST',
+        body: JSON.stringify(place),
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
   deleteState = async (id) => {
     console.log(id);
     try {
@@ -128,6 +158,12 @@ class App extends Component {
       this.setState({userStates: userStates})
     }).catch((err) => {
       console.log(err);
+    });
+    this.getUserPlaces().then((userPlaces) => {
+      console.log(userPlaces, 'cdm userPlaces');
+      this.setState({userPlaces: userPlaces})
+    }).catch((err) => {
+      console.log(err);
     })
   }
 
@@ -139,7 +175,9 @@ class App extends Component {
           currentPlaces={this.state.currentPlaces}
           showState={this.state.showState}
           userStates={this.state.userStates}
+          userPlaces={this.state.userPlaces}
           saveState={this.saveState}
+          savePlace={this.savePlace}
           deleteState={this.deleteState} />
         <SearchContainer geoSearch={this.geoSearch} />
       </div>
