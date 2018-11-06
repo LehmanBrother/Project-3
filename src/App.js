@@ -80,6 +80,24 @@ class App extends Component {
     }
   }
 
+  deleteState = async (id) => {
+    console.log(id);
+    try {
+      const deletedState = await fetch('http://localhost:9000/api/v1/census/state/' + id, {
+        method: 'DELETE'
+      });
+      const deletedStateJson = await deletedState.json();
+      const updatedStateList = this.state.userStates.filter((el) => {
+        return el._id !== id
+      })
+      this.setState({
+        userStates: updatedStateList
+      })
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
   componentDidMount(){
     console.log('cdm');
     this.getUserStates().then((userStates) => {
@@ -93,7 +111,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <StateContainer currentState={this.state.currentState} userStates={this.state.userStates} saveState={this.saveState} />
+        <StateContainer currentState={this.state.currentState} userStates={this.state.userStates} saveState={this.saveState} deleteState={this.deleteState} />
         <SearchContainer geoSearch={this.geoSearch} />
       </div>
     );
