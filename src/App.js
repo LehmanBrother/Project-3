@@ -16,7 +16,9 @@ class App extends Component {
         pop: 0,
         density: 0,
         code: 0
-      }
+      },
+      currentGeoShow: '',//this will determine whether StateContainer shows state or place
+      userStates: []
     }
   }
 
@@ -54,6 +56,30 @@ class App extends Component {
     }
   }
 
+  saveState = async (e) => {
+    //calls state post route
+    e.preventDefault();
+    console.log('saveState called');
+    try {
+      const savedState = await fetch('http://localhost:9000/api/v1/census/state', {
+        method: 'POST',
+        body: JSON.stringify(this.state.currentState),
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const parsedResponse = await savedState.json();
+      console.log(parsedResponse.data, 'parsedResponse.data');
+      this.setState({
+        userStates: [...this.state.userStates, parsedResponse.data]
+      });
+      console.log(this.state.userStates, 'userStates');
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
   componentDidMount(){
     console.log('cdm');
     //this.getAllStates();
@@ -62,7 +88,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <StateContainer />
+        <StateContainer currentState={this.state.currentState} saveState={this.saveState} />
         <SearchContainer geoSearch={this.geoSearch} />
       </div>
     );
