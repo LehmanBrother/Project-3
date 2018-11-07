@@ -29,13 +29,14 @@ export class MapContainer extends Component {
     //coordinates are in an array of an array of an array
     //this converts them into an array of objects for each state
     const allStates = [];
-    coordinates.features.map((feature) => {
+    const coords = {coordinates}
+    coords.features.map((feature) => {
       let oneState ={
         name: feature.properties.NAME,
-        coords: []
+        coords: null
       };
       this.getCoordinates(feature).then((state) => {
-        oneState.coords.push(state)
+        oneState.coords = state
       });
       allStates.push(oneState);
     });
@@ -46,19 +47,16 @@ export class MapContainer extends Component {
       this.setState({
         states: data
       });
-      console.log(this.state.states, '<--------- all coords');
     }).catch((err) => {
       console.log(err);
     });
   }
   render() {
+    console.log(this.state.states, '<--------- all coords');
     return (
       <Map 
         google={this.props.google} 
         zoom={14}>
-        
-        
-
       </Map>
     );
   }
