@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import GameContainer from './GameContainer';
 import MapContainer from './MapContainer';
 import './App.css';
 import apiKey from './apiKey.js'
@@ -205,7 +206,10 @@ class App extends Component {
             deletePlace={this.deletePlace} />
           <SearchContainer geoSearch={this.geoSearch} />
         </div>
-        <MapContainer />
+        <div>
+          <GameContainer />
+          <MapContainer />
+        </div>
       </div>
     );
   }
