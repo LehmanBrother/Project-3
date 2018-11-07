@@ -72,9 +72,15 @@ export class MapContainer extends Component {
 
   //methods for the map
   
+  getCensusData = async () => {
+    const censusData = await fetch('http://localhost:9000/api/v1/census');
+    const censusDataJson = censusData.json();
+    console.log(censusDataJson);
+  }
+
   onMouseoverPolygon = (props, polygon, e) => {
     console.log('mouseover of ', props.id, 'all data: ', props);
-    
+    this.getCensusData();
   }
   
   render() {
@@ -99,17 +105,22 @@ export class MapContainer extends Component {
     }
 
     return (
-      <Map 
-        google={this.props.google} 
-        zoom={4.5}
-        initialCenter={{
-          lat: 40.854885,
-          lng: -88.081807 
-        }}>
+      <div>
+        <div class="display>">
 
-          {shapeToRender}
+        </div>
+        <Map 
+          google={this.props.google} 
+          zoom={4.5}
+          initialCenter={{
+            lat: 40.854885,
+            lng: -88.081807 
+          }}>
 
-      </Map>
+            {shapeToRender}
+
+        </Map>
+      </div>
     );
   }
 }
