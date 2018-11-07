@@ -192,18 +192,20 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <div id="textContainer">
+          <StateContainer
+            currentState={this.state.currentState}
+            currentPlaces={this.state.currentPlaces}
+            showState={this.state.showState}
+            userStates={this.state.userStates}
+            userPlaces={this.state.userPlaces}
+            saveState={this.saveState}
+            savePlace={this.savePlace}
+            deleteState={this.deleteState}
+            deletePlace={this.deletePlace} />
+          <SearchContainer geoSearch={this.geoSearch} />
+        </div>
         <MapContainer />
-        <StateContainer
-          currentState={this.state.currentState}
-          currentPlaces={this.state.currentPlaces}
-          showState={this.state.showState}
-          userStates={this.state.userStates}
-          userPlaces={this.state.userPlaces}
-          saveState={this.saveState}
-          savePlace={this.savePlace}
-          deleteState={this.deleteState}
-          deletePlace={this.deletePlace} />
-        <SearchContainer geoSearch={this.geoSearch} />
       </div>
     );
   }

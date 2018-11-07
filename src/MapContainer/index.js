@@ -54,10 +54,14 @@ export class MapContainer extends Component {
   render() {
     console.log(this.state.states, '<--------- all coords');
     return (
-      <Map 
-        google={this.props.google} 
-        zoom={14}>
-      </Map>
+      <div class="map">
+        <Map
+          google={this.props.google} 
+          initialCenter={{lat: 38, lng: -96}}
+          zoom={4.3}
+          style={{height: '450px', width: '825px'}}>
+        </Map>
+      </div>
     );
   }
 }
