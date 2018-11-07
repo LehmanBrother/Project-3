@@ -27,6 +27,7 @@ class StateContainer extends Component {
 					<h5>{userPlace.name}</h5>
 					<p>Population: {userPlace.pop}</p>
 					<p>Density: {Math.round(10*userPlace.density)/10}/sq mi</p>
+					<button onClick={this.props.deletePlace.bind(null,userPlace._id)}>Delete City</button>
 				</li>
 			)
 		})

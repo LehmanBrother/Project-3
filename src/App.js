@@ -128,6 +128,10 @@ class App extends Component {
           'Content-Type': 'application/json'
         }
       })
+      const parsedResponse = await savedPlace.json();
+      this.setState({
+        userPlaces: [...this.state.userPlaces, parsedResponse.data]
+      });
     } catch(err) {
       console.log(err);
     }
@@ -145,6 +149,24 @@ class App extends Component {
       })
       this.setState({
         userStates: updatedStateList
+      })
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
+  deletePlace = async (id) => {
+    console.log(id);
+    try {
+      const deletedPlace = await fetch('http://localhost:9000/api/v1/census/place/' + id, {
+        method: 'DELETE'
+      });
+      const deletedPlaceJson = await deletedPlace.json();
+      const updatedPlaceList = this.state.userPlaces.filter((el) => {
+        return el._id !== id
+      });
+      this.setState({
+        userPlaces: updatedPlaceList
       })
     } catch(err) {
       console.log(err);
@@ -178,7 +200,8 @@ class App extends Component {
           userPlaces={this.state.userPlaces}
           saveState={this.saveState}
           savePlace={this.savePlace}
-          deleteState={this.deleteState} />
+          deleteState={this.deleteState}
+          deletePlace={this.deletePlace} />
         <SearchContainer geoSearch={this.geoSearch} />
       </div>
     );
