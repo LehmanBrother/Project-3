@@ -17,16 +17,54 @@ class QuestionContainer extends Component {
 			[e.currentTarget.name]: e.currentTarget.value
 		});
 	}
-	getGeos(){
+	getGeos = async (e) => {
 		//based on user selection, return geo or geo1 and geo2
-
+		e.preventDefault();
+		console.log('getGeos called');
+		if(this.state.stateOrPlace === 'States Only') {
+			try {
+				const randStates = await fetch('http://localhost:9000/api/v1/census/question/state');
+				const randStatesJson = await randStates.json();
+				console.log(randStatesJson.data);
+				if(this.state.estimateOrComparison === 'Estimate') {
+					this.setState({
+						geo: randStatesJson.data[0]
+					})
+				} else {
+					this.setState({
+						geo1: randStatesJson.data[0],
+						geo2: randStatesJson.data[1]
+					})
+				}
+				console.log(this.state);
+			} catch(err) {
+				console.log(err);
+			}
+		} else if(this.state.stateOrPlace === 'Cities Only') {
+			try {
+				const randPlaces = await fetch('http://localhost:9000/api/v1/census/question/place');
+				const randPlacesJson = await randPlaces.json();
+				console.log(randPlacesJson.data);
+				if(this.state.estimateOrComparison === 'Estimate') {
+					this.setState({
+						geo: randPlacesJson.data[0]
+					})
+				} else {
+					this.setState({
+						geo1: randPlacesJson.data[0],
+						geo2: randPlacesJson.data[1]
+					})
+				}
+				console.log(this.state);
+			} catch(err) {
+				console.log(err);
+			}
+		}
 	}
 	componentDidMount(){
 		//
 	}
 	render(){
-		console.log(this.state.estimateOrComparison, 'tseoc');
-		console.log(this.state.densityOrPop, 'tsdop');
 		let questionType1 = this.state.estimateOrComparison;
 		let questionType2 = this.state.densityOrPop;
 		let questionPart1;
@@ -45,13 +83,13 @@ class QuestionContainer extends Component {
 		}
 		let questionText;
 		if(questionType1 === 'Estimate') {
-			questionText = questionPart1 + '[geo]' + '?';
+			questionText = questionPart1 + this.state.geo.name + '?';
 		} else {
-			questionText = questionPart1 + '[geo1]' + ' or ' + '[geo2]' + '?';
+			questionText = questionPart1 + this.state.geo1.name + ' or ' + this.state.geo2.name + '?';
 		}
 		return(
 			<span className="gameSpan" id="questionContainer">
-				<form>
+				<form onSubmit={this.getGeos}>
 					<select name='estimateOrComparison' value={this.state.estimateOrComparison} onChange={this.updateQuestion}>
 						<option>Estimate</option>
 						<option>Comparison</option>
@@ -65,6 +103,7 @@ class QuestionContainer extends Component {
 						<option>Cities Only</option>
 						<option>States and Cities</option>
 					</select>
+					<button type='Submit'>Get New Question</button>
 				</form>
 				<h3>Question Container</h3>
 				<h5>Current Question:</h5>
