@@ -37,6 +37,7 @@ class QuestionContainer extends Component {
 					})
 				}
 				console.log(this.state);
+				this.props.editAnswerContainer(this.state);
 			} catch(err) {
 				console.log(err);
 			}
@@ -56,6 +57,7 @@ class QuestionContainer extends Component {
 					})
 				}
 				console.log(this.state);
+				this.props.editAnswerContainer(this.state);
 			} catch(err) {
 				console.log(err);
 			}

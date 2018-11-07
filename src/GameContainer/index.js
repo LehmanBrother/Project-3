@@ -6,8 +6,14 @@ class GameContainer extends Component {
 	constructor(){
 		super();
 		this.state = {
-
+			estimateOrComparison: ''
 		}
+	}
+	editAnswerContainer = (questionState) => {
+		console.log(questionState, 'qs');
+		this.setState({
+			estimateOrComparison: questionState.estimateOrComparison
+		})
 	}
 	render(){
 		//GameContainer should contain the following:
@@ -18,21 +24,13 @@ class GameContainer extends Component {
 				<span className="gameSpan">
 					<h3>GameContainer</h3>
 				</span>
-				<QuestionContainer />
-				<AnswerContainer />
+				<QuestionContainer
+					editAnswerContainer={this.editAnswerContainer} />
+				<AnswerContainer
+					estimateOrComparison={this.state.estimateOrComparison} />
 			</div>
 		)
 	}
 }
-
-//Geo types:
-	//State
-	//Place w/pop >= 100,000
-
-//Question types:
-	//Guess pop
-	//Compare pop
-	//Guess density
-	//Compare density
 
 export default GameContainer
