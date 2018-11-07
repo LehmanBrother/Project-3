@@ -15,7 +15,7 @@ class GameContainer extends Component {
 			//AnswerContainer: depending on type of question, allows user to type in response or select from list of answers and submit
 		return(
 			<div id="gameContainer">
-				<span class="gameSpan">
+				<span className="gameSpan">
 					<h3>GameContainer</h3>
 				</span>
 				<QuestionContainer />

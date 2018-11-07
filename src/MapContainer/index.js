@@ -54,7 +54,7 @@ export class MapContainer extends Component {
   render() {
     console.log(this.state.states, '<--------- all coords');
     return (
-      <div class="map">
+      <div className="map">
         <Map
           google={this.props.google} 
           initialCenter={{lat: 38, lng: -96}}

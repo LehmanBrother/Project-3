@@ -9,7 +9,7 @@ class AnswerContainer extends Component {
 	}
 	render(){
 		return(
-			<span class="gameSpan" id="answerContainer">
+			<span className="gameSpan" id="answerContainer">
 				<p>Answer Container</p>
 			</span>
 		)
