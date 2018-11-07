@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import MapContainer from './MapContainer';
 import './App.css';
 import apiKey from './apiKey.js'
 import StateContainer from './StateContainer';
@@ -192,6 +192,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <MapContainer />
         <StateContainer
           currentState={this.state.currentState}
           currentPlaces={this.state.currentPlaces}
