@@ -1,5 +1,4 @@
-const Coordinates = () => {
-    return{
+const Coordinates = {
      "type": "FeatureCollection",
      "features": [
       {
@@ -32473,6 +32472,6 @@ const Coordinates = () => {
        }
       }
      ]
-    };
-}
+};
+
 export default Coordinates

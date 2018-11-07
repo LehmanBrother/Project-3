@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MapContainer from './MapContainer';
 import './App.css';
-import apiKey from './apiKey.js'
+// import apiKey from './apiKey.js'
 import StateContainer from './StateContainer';
 import SearchContainer from './SearchContainer';
 
