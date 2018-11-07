@@ -73,7 +73,8 @@ export class MapContainer extends Component {
   //methods for the map
   
   onMouseoverPolygon = (props, polygon, e) => {
-    console.log('mouseover! props: ', props, 'polygon: ', polygon, 'e: ', e);
+    console.log('mouseover of ', props.id, 'all data: ', props);
+    
   }
   
   render() {
