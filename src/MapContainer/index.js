@@ -19,13 +19,28 @@ export class MapContainer extends Component {
   }
   getCoordinates = async (feature) => {
     let coordinateArr = [];
-    feature.geometry.coordinates[0].map((elem) => {
-      let coordPair = {
-        lat: Number(elem[1]),
-        lng: Number(elem[0])
-      }
-      coordinateArr.push(coordPair);
-    });
+    //some states have more than one array - this logic
+    //should help parse them
+    if(feature.geometry.coordinates.length > 1){
+      console.log('weird state:');
+      feature.geometry.coordinates.forEach((subArr) => {
+        subArr.map((elem) => {
+          let coordPair = {
+            lat: Number(elem[1]),
+            lng: Number(elem[0])
+          }
+          coordinateArr.push(coordPair);
+        });
+      });
+    }else{
+      feature.geometry.coordinates[0].map((elem) => {
+        let coordPair = {
+          lat: Number(elem[1]),
+          lng: Number(elem[0])
+        }
+        coordinateArr.push(coordPair);
+      });
+    }
     console.log(coordinateArr, '<------- getCoordinates ');
     return coordinateArr
   }
@@ -65,11 +80,11 @@ export class MapContainer extends Component {
             id={state.name}
             key={i}
             paths={state.coords}
-            strokeColor="#0000FF"
-            strokeOpacity={0.8}
+            strokeColor="white"
+            strokeOpacity={0.5}
             strokeWeight={2}
-            fillColor="#0000FF"
-            fillOpacity={0.35} />
+            fillColor="white"
+            fillOpacity={0} />
         )
       })
     }
@@ -77,7 +92,11 @@ export class MapContainer extends Component {
     return (
       <Map 
         google={this.props.google} 
-        zoom={14}>
+        zoom={4.5}
+        initialCenter={{
+          lat: 40.854885,
+          lng: -88.081807 
+        }}>
 
           {shapeToRender}
 
