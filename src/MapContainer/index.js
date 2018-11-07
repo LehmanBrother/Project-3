@@ -105,20 +105,13 @@ export class MapContainer extends Component {
     }
 
     return (
-      <div>
-        <div class="display>">
-
-        </div>
-        <Map 
+      <div className="map">
+        <Map
           google={this.props.google} 
-          zoom={4.5}
-          initialCenter={{
-            lat: 40.854885,
-            lng: -88.081807 
-          }}>
-
+          initialCenter={{lat: 38, lng: -96}}
+          zoom={4.3}
+          style={{height: '450px', width: '825px'}}>
             {shapeToRender}
-
         </Map>
       </div>
     );

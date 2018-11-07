@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import GameContainer from './GameContainer';
 import MapContainer from './MapContainer';
 import './App.css';
 // import apiKey from './apiKey.js'
@@ -49,13 +50,10 @@ class App extends Component {
 
   geoSearch = async (search, e) => {
     e.preventDefault();
-    console.log(search.searchType, 'searchType');
     await this.setState({
       showState: search.searchType == 'State'
     });
-    console.log(this.state.showState, 'showState');
     if(this.state.showState) {
-      console.log('state woo');
       try {
         const searchedGeo = await fetch('http://localhost:9000/api/v1/census/stateSearch/' + search.searchText);
         const parsedResponse = await searchedGeo.json();
@@ -70,21 +68,17 @@ class App extends Component {
             code: censusStateJson[1][3]
           }
         })
-        console.log(this.state, 'after search');
       } catch(err) {
         console.log(err);
       }
     } else {
-      console.log('city woo');
       try {
         const searchedGeo = await fetch('http://localhost:9000/api/v1/census/placeSearch/' + search.searchText);
         const parsedResponse = await searchedGeo.json();
-        console.log(parsedResponse.data, 'parsedResponse.data');
         this.setState({
           //array of all matching places
           currentPlaces: parsedResponse.data
         })
-        console.log(this.state, 'after search');
       } catch(err) {
         console.log(err);
       }
@@ -94,7 +88,6 @@ class App extends Component {
   saveState = async (e) => {
     //calls state post route
     e.preventDefault();
-    console.log('saveState called');
     try {
       const savedState = await fetch('http://localhost:9000/api/v1/census/state', {
         method: 'POST',
@@ -105,11 +98,9 @@ class App extends Component {
         }
       })
       const parsedResponse = await savedState.json();
-      console.log(parsedResponse.data, 'parsedResponse.data');
       this.setState({
         userStates: [...this.state.userStates, parsedResponse.data]
       });
-      console.log(this.state.userStates, 'userStates');
     } catch(err) {
       console.log(err);
     }
@@ -117,8 +108,6 @@ class App extends Component {
 
   savePlace = async (place, e) => {
     e.preventDefault();
-    console.log('savePlace called');
-    console.log(place, 'place');
     try {
       const savedPlace = await fetch('http://localhost:9000/api/v1/census/place', {
         method: 'POST',
@@ -138,7 +127,6 @@ class App extends Component {
   }
 
   deleteState = async (id) => {
-    console.log(id);
     try {
       const deletedState = await fetch('http://localhost:9000/api/v1/census/state/' + id, {
         method: 'DELETE'
@@ -156,7 +144,6 @@ class App extends Component {
   }
 
   deletePlace = async (id) => {
-    console.log(id);
     try {
       const deletedPlace = await fetch('http://localhost:9000/api/v1/census/place/' + id, {
         method: 'DELETE'
@@ -176,13 +163,11 @@ class App extends Component {
   componentDidMount(){
     console.log(this.state, 'cdm');
     this.getUserStates().then((userStates) => {
-      console.log(userStates, 'cdm userStates');
       this.setState({userStates: userStates})
     }).catch((err) => {
       console.log(err);
     });
     this.getUserPlaces().then((userPlaces) => {
-      console.log(userPlaces, 'cdm userPlaces');
       this.setState({userPlaces: userPlaces})
     }).catch((err) => {
       console.log(err);
@@ -192,18 +177,23 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <MapContainer />
-        <StateContainer
-          currentState={this.state.currentState}
-          currentPlaces={this.state.currentPlaces}
-          showState={this.state.showState}
-          userStates={this.state.userStates}
-          userPlaces={this.state.userPlaces}
-          saveState={this.saveState}
-          savePlace={this.savePlace}
-          deleteState={this.deleteState}
-          deletePlace={this.deletePlace} />
-        <SearchContainer geoSearch={this.geoSearch} />
+        <div id="textContainer">
+          <StateContainer
+            currentState={this.state.currentState}
+            currentPlaces={this.state.currentPlaces}
+            showState={this.state.showState}
+            userStates={this.state.userStates}
+            userPlaces={this.state.userPlaces}
+            saveState={this.saveState}
+            savePlace={this.savePlace}
+            deleteState={this.deleteState}
+            deletePlace={this.deletePlace} />
+          <SearchContainer geoSearch={this.geoSearch} />
+        </div>
+        <div>
+          <GameContainer />
+          <MapContainer />
+        </div>
       </div>
     );
   }
