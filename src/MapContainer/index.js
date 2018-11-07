@@ -69,6 +69,13 @@ export class MapContainer extends Component {
       console.log(err);
     });
   }
+
+  //methods for the map
+  
+  onMouseoverPolygon = (props, polygon, e) => {
+    console.log('mouseover! props: ', props, 'polygon: ', polygon, 'e: ', e);
+  }
+  
   render() {
     console.log(this.state.states, '<--------- all coords');
     let shapeToRender
@@ -84,7 +91,8 @@ export class MapContainer extends Component {
             strokeOpacity={0.5}
             strokeWeight={2}
             fillColor="white"
-            fillOpacity={0} />
+            fillOpacity={0} 
+            onMouseover={this.onMouseoverPolygon} />
         )
       })
     }
