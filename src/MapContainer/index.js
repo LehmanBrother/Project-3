@@ -11,7 +11,9 @@ export class MapContainer extends Component {
       default: {
         lat: 41.8781,
         lng: 87.6298
-      }
+      },
+      searchText: '',
+      searchType: 'State'
     }
   }
   whatsUp = () => {
@@ -44,7 +46,8 @@ export class MapContainer extends Component {
     console.log(coordinateArr, '<------- getCoordinates ');
     return coordinateArr
   }
-  getAllStatesCoordinates = async () => {
+  getAllStatesCoordinates = async (e) => {
+    // e.preventDefault();
     //coordinates are in an array of an array of an array
     //this converts them into an array of objects for each state
     const allStates = [];
@@ -74,13 +77,19 @@ export class MapContainer extends Component {
   
   getCensusData = async () => {
     const censusData = await fetch('http://localhost:9000/api/v1/census');
-    const censusDataJson = censusData.json();
-    console.log(censusDataJson);
+    console.log(censusData);
   }
 
-  onMouseoverPolygon = (props, polygon, e) => {
-    console.log('mouseover of ', props.id, 'all data: ', props);
-    this.getCensusData();
+  updateSearch = (props, polygon, e) => {
+    console.log('mouseover of ', props.value, '_____all data: ', props);
+    this.setState({
+      [props.name]: props.value
+    });
+  }
+
+  updateState = (props, polygon, e) => {
+    console.log(this.state.searchType, this.state.searchText);
+    {this.props.geoSearch.bind(null, this.state)}
   }
   
   render() {
@@ -91,7 +100,8 @@ export class MapContainer extends Component {
         console.log(state.coords, '<---------', state.name);
         return (
           <Polygon
-            id={state.name}
+            name='searchText'
+            value={state.name}
             key={i}
             paths={state.coords}
             strokeColor="white"
@@ -99,13 +109,19 @@ export class MapContainer extends Component {
             strokeWeight={2}
             fillColor="white"
             fillOpacity={0} 
-            onMouseover={this.onMouseoverPolygon} />
+            onMouseover={this.updateSearch} 
+            onClick={this.updateState} />
         )
       })
     }
 
     return (
       <div className="map">
+      
+      <div className="display">
+
+      </div>
+
         <Map
           google={this.props.google} 
           initialCenter={{lat: 38, lng: -96}}
