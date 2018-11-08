@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import QuestionContainer from '../QuestionContainer';
 import AnswerContainer from '../AnswerContainer';
+import serverURL from '../env.js';
 
 class GameContainer extends Component {
 	constructor(){
@@ -89,7 +90,7 @@ class GameContainer extends Component {
 		});
 		//call answer post route
 		try {
-			const newAnswer = await fetch('http://localhost:9000/api/v1/census/answer', {
+			const newAnswer = await fetch(serverURL + '/api/v1/census/answer', {
 				method: 'POST',
 				body: JSON.stringify({
 					type: this.state.estimateOrComparison,
@@ -128,7 +129,7 @@ class GameContainer extends Component {
 		})
 		//call answer post route
 		try {
-			const newAnswer = await fetch('http://localhost:9000/api/v1/census/answer', {
+			const newAnswer = await fetch(serverURL + '/api/v1/census/answer', {
 				method: 'POST',
 				body: JSON.stringify({
 					type: this.state.estimateOrComparison,
@@ -148,7 +149,7 @@ class GameContainer extends Component {
 	}
 	aggregateEstimates = async () => {
 		try {
-			const estAgg = await fetch('http://localhost:9000/api/v1/census/answer/est');
+			const estAgg = await fetch(serverURL + '/api/v1/census/answer/est');
 			const estAggJson = await estAgg.json();
 			console.log(estAggJson.data[0].avgPctDif, 'apd');
 			return estAggJson.data[0].avgPctDif;
@@ -158,7 +159,7 @@ class GameContainer extends Component {
 	}
 	aggregateComparisons = async () => {
 		try {
-			const compAgg = await fetch('http://localhost:9000/api/v1/census/answer/comp');
+			const compAgg = await fetch(serverURL + '/api/v1/census/answer/comp');
 			const compAggJson = await compAgg.json();
 			console.log(compAggJson.data[0].pctCorrect, 'ac');
 			return compAggJson.data[0].pctCorrect;

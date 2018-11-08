@@ -7,6 +7,9 @@
 
 # apiKey
 **/apiKey.js
+**/api_key.js
+**/env.js
+
 
 # testing
 /coverage

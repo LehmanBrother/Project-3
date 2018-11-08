@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import serverURL from '../env.js';
 
 class QuestionContainer extends Component {
 	constructor(){
@@ -23,7 +24,7 @@ class QuestionContainer extends Component {
 		console.log('getGeos called');
 		if(this.state.stateOrPlace === 'States Only') {
 			try {
-				const randStates = await fetch('http://localhost:9000/api/v1/census/question/state');
+				const randStates = await fetch(serverURL + '/api/v1/census/question/state');
 				const randStatesJson = await randStates.json();
 				console.log(randStatesJson.data);
 				if(this.state.estimateOrComparison === 'Estimate') {
@@ -44,7 +45,7 @@ class QuestionContainer extends Component {
 			}
 		} else if(this.state.stateOrPlace === 'Cities Only') {
 			try {
-				const randPlaces = await fetch('http://localhost:9000/api/v1/census/question/place');
+				const randPlaces = await fetch(serverURL + '/api/v1/census/question/place');
 				const randPlacesJson = await randPlaces.json();
 				console.log(randPlacesJson.data);
 				if(this.state.estimateOrComparison === 'Estimate') {
