@@ -16,7 +16,9 @@ class GameContainer extends Component {
 			lowerValGeo: '',
 			currentPctDif: 0,
 			correctAnswer: '',
-			questionAnswered: false
+			questionAnswered: false,
+			avgPctDif: null,
+			pctCorrect: null,
 		}
 	}
 	editAnswerContainer = (questionState) => {
@@ -67,38 +69,115 @@ class GameContainer extends Component {
 	}
 	evaluateEstimate = async (userEstimate) => {
 		console.log('ee called');
+		let pctDif;
 		if(this.state.densityOrPop === 'Population') {
-			const pctDif = Math.round(1000*Math.abs(this.state.questionGeo.pop - userEstimate)/this.state.questionGeo.pop)/10
+			pctDif = Math.round(1000*Math.abs(this.state.questionGeo.pop - userEstimate)/this.state.questionGeo.pop)/10
 			await this.setState({
-				correctAnswer: this.state.questionGeo.pop,
-				currentPctDif: pctDif,
-				questionAnswered: true
+				correctAnswer: this.state.questionGeo.pop
 			})
 			console.log(this.state.currentPctDif, 'tscpd');
 		} else if(this.state.densityOrPop === 'Density') {
-			const pctDif = Math.round(1000*Math.abs(this.state.questionGeo.density - userEstimate)/this.state.questionGeo.density)/10
+			pctDif = Math.round(1000*Math.abs(this.state.questionGeo.density - userEstimate)/this.state.questionGeo.density)/10
 			await this.setState({
-				correctAnswer: Math.round(10*this.state.questionGeo.density)/10,
-				currentPctDif: pctDif,
-				questionAnswered: true
+				correctAnswer: Math.round(10*this.state.questionGeo.density)/10
 			})
 			console.log(this.state.currentPctDif, 'tscpd');
+		}
+		await this.setState({
+			currentPctDif: pctDif,
+			questionAnswered: true
+		});
+		//call answer post route
+		try {
+			const newAnswer = await fetch('http://localhost:9000/api/v1/census/answer', {
+				method: 'POST',
+				body: JSON.stringify({
+					type: this.state.estimateOrComparison,
+					isCorrect: 0,
+					pctDif: pctDif
+				}),
+				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			const parsedResponse = await newAnswer.json();
+			console.log(parsedResponse, 'parsedResponse');
+		} catch(err) {
+			console.log(err);
 		}
 	}
 	evaluateComparison = async (comparisonInput) => {
 		console.log('ec called');
-		console.log(comparisonInput, 'ec ci');
 		let pctDif;
+		let isCorrect;
 		if(this.state.densityOrPop === 'Population') {
 			pctDif = Math.round(1000*Math.abs(this.state.questionGeo1.pop - this.state.questionGeo2.pop)/this.state.lowerValGeo.pop)/10
 		} else if(this.state.densityOrPop === 'Density') {
 			pctDif = Math.round(1000*Math.abs(this.state.questionGeo1.density - this.state.questionGeo2.density)/this.state.lowerValGeo.density)/10
 		}
-		this.setState({
+		if(comparisonInput === this.state.higherValId) {
+			isCorrect = 1;
+		} else {
+			isCorrect = 0;
+		}
+		await this.setState({
 			correctAnswer: this.state.higherValGeo.name,
 			currentPctDif: pctDif,
 			questionAnswered: true
 		})
+		//call answer post route
+		try {
+			const newAnswer = await fetch('http://localhost:9000/api/v1/census/answer', {
+				method: 'POST',
+				body: JSON.stringify({
+					type: this.state.estimateOrComparison,
+					isCorrect: isCorrect,
+					pctDif: pctDif
+				}),
+				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			const parsedResponse = await newAnswer.json();
+			console.log(parsedResponse, 'parsedResponse');
+		} catch(err) {
+			console.log(err);
+		}
+	}
+	aggregateEstimates = async () => {
+		try {
+			const estAgg = await fetch('http://localhost:9000/api/v1/census/answer/est');
+			const estAggJson = await estAgg.json();
+			console.log(estAggJson.data[0].avgPctDif, 'apd');
+			return estAggJson.data[0].avgPctDif;
+		} catch(err) {
+			console.log(err);
+		}
+	}
+	aggregateComparisons = async () => {
+		try {
+			const compAgg = await fetch('http://localhost:9000/api/v1/census/answer/comp');
+			const compAggJson = await compAgg.json();
+			console.log(compAggJson.data[0].pctCorrect, 'ac');
+			return compAggJson.data[0].pctCorrect;
+		} catch(err) {
+			console.log(err);
+		}
+	}
+	componentDidMount(){
+		//call answer aggregator, set state accordingly
+		this.aggregateEstimates().then((avgPctDif) => {
+			this.setState({avgPctDif: avgPctDif})
+		}).catch((err) => {
+			console.log(err);
+		});
+		this.aggregateComparisons().then((pctCorrect) => {
+			this.setState({pctCorrect: pctCorrect})
+		}).catch((err) => {
+			console.log(err);
+		});
 	}
 	render(){
 
@@ -113,6 +192,8 @@ class GameContainer extends Component {
 						</label> :
 						<p>Result will appear here</p>
 					}
+					<p>Percent Correct: {Math.round(1000*this.state.pctCorrect)/10}%</p>
+					<p>Average Estimate Variance: {Math.round(10*this.state.avgPctDif)/10}%</p>
 				</span>
 				<QuestionContainer
 					editAnswerContainer={this.editAnswerContainer}
