@@ -80,16 +80,16 @@ class QuestionContainer extends Component {
 			}
 		} else {
 			if(questionType2 === 'Population') {
-				questionPart1 = 'Which has a higher population: '
+				questionPart1 = 'Which has a higher population: (1)'
 			} else {
-				questionPart1 = 'Which has a higher population density: '
+				questionPart1 = 'Which has a higher population density: (1)'
 			}
 		}
 		let questionText;
 		if(questionType1 === 'Estimate') {
 			questionText = questionPart1 + this.state.geo.name + '?';
 		} else {
-			questionText = questionPart1 + this.state.geo1.name + ' or ' + this.state.geo2.name + '?';
+			questionText = questionPart1 + this.state.geo1.name + ' or (2)' + this.state.geo2.name + '?';
 		}
 		return(
 			<span className="gameSpan" id="questionContainer">
