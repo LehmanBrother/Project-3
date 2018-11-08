@@ -38,6 +38,7 @@ class QuestionContainer extends Component {
 				}
 				console.log(this.state);
 				this.props.editAnswerContainer(this.state);
+				this.props.updateQuestionGeos(this.state.geo, this.state.geo1, this.state.geo2);
 			} catch(err) {
 				console.log(err);
 			}
@@ -58,6 +59,7 @@ class QuestionContainer extends Component {
 				}
 				console.log(this.state);
 				this.props.editAnswerContainer(this.state);
+				this.props.updateQuestionGeos(this.state.geo, this.state.geo1, this.state.geo2);
 			} catch(err) {
 				console.log(err);
 			}
@@ -114,15 +116,5 @@ class QuestionContainer extends Component {
 		)
 	}
 }
-
-//User selects:
-	//Population or density
-	//Estimate or comparison
-	//Only states, only places, or either
-
-//What is the population of [geo]?
-//What is the population density of [geo]?
-//Which has a higher population: [geo1] or [geo2]?
-//Which has a higher population density: [geo1] or [geo2]?
 
 export default QuestionContainer

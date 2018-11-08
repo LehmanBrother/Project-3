@@ -8,6 +8,15 @@ class AnswerContainer extends Component {
 			estimateInput: ''
 		}
 	}
+	handleEstimateInputChange = (e) => {
+		this.setState({
+			[e.currentTarget.name]: e.currentTarget.value
+		})
+	}
+	submitEstimate = (e) => {
+		e.preventDefault();
+		this.props.evaluateEstimate(this.state.estimateInput)
+	}
 	render(){
 		let estimateInputModal;
 		if(this.props.estimateOrComparison === 'Estimate') {
@@ -15,13 +24,15 @@ class AnswerContainer extends Component {
 		} else {
 			estimateInputModal = false
 		}
-		console.log(estimateInputModal, 'eim');
 		return(
 			<span className="gameSpan" id="answerContainer">
 				<p>Answer Container</p>
 				<p>{this.props.estimateOrComparison}</p>
 				{estimateInputModal ? 
-					<EstimateInput estimateInput={this.state.estimateInput} /> :
+					<EstimateInput
+						estimateInput={this.state.estimateInput}
+						handleEstimateInputChange={this.handleEstimateInputChange}
+						submitEstimate={this.submitEstimate}  /> :
 					<p>Comparison Input</p>
 				}
 			</span>
