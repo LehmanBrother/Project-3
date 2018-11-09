@@ -3,12 +3,6 @@ import { Button } from 'semantic-ui-react';
 
 
 class CurrentStateContainer extends Component {
-	constructor() {
-		super();
-		this.state = {
-
-		}
-	}
 	render() {
 		return (
 			<div>

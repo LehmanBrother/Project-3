@@ -7,7 +7,12 @@
 
 # apiKey
 **/apiKey.js
+<<<<<<< HEAD
+**/api_key.js
+
+=======
 /apie_key.js
+>>>>>>> 7c385fa94076ecf0b50dc69b3a92a43e17af3826
 
 # testing
 /coverage

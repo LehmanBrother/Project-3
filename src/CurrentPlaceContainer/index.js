@@ -2,14 +2,7 @@ import React, {Component} from 'react';
 import { Button } from 'semantic-ui-react';
 
 class CurrentPlaceContainer extends Component {
-	constructor() {
-		super();
-		this.state = {
-
-		}
-	}
 	render() {
-		console.log(this.props, 'cpc this.props');
 		const currentPlaces = this.props.currentPlaces.map((place, i) => {
 			return (
 				<li key={place._id}>

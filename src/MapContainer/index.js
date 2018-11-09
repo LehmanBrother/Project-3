@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Map, Polygon, GoogleApiWrapper, Marker} from 'google-maps-react';
+import {Map, Polygon, GoogleApiWrapper/*, Marker*/} from 'google-maps-react';
 import coordinates from '../Coordinates';
 import Key from '../api_key'; 
 
@@ -15,9 +15,6 @@ export class MapContainer extends Component {
       searchText: '',
       searchType: 'State'
     }
-  }
-  whatsUp = () => {
-    console.log('whaddup');
   }
   getCoordinates = async (feature) => {
     let coordinateArr = [];
@@ -76,15 +73,13 @@ export class MapContainer extends Component {
   //methods for the map
   
   updateSearch = (props, polygon) => {
-    console.log('mouseover of ', props.value, '_____all data: ', props);
+    //console.log('mouseover of ', props.value, '_____all data: ', props);
     this.setState({
       [props.name]: props.value
     });
   }
 
   searchState = (props, poly, e) => {
-    console.log(props, poly, e);
-    console.log(this.state.searchText, '_______search state');
     this.props.geoSearch(this.state, e.va)
   }
   

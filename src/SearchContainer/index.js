@@ -16,7 +16,6 @@ class SearchContainer extends Component {
 		});
 	}
 	render(){
-		console.log(this.state);
 		return (
 			<div>
 				<h2>SearchContainer</h2>
