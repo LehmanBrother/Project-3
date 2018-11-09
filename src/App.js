@@ -51,14 +51,17 @@ class App extends Component {
   geoSearch = async (search, e) => {
     e.preventDefault();
     await this.setState({
-      showState: search.searchType == 'State'
+      showState: search.searchType === 'State'
     });
+    console.log(search.searchText, '<-------- search text pre-if-showstate');
+    console.log(this.state.showState, '<------ showState');
     if(this.state.showState) {
       try {
         const searchedGeo = await fetch(serverURL + '/api/v1/census/stateSearch/' + search.searchText);
         const parsedResponse = await searchedGeo.json();
         const censusState = await fetch(baseEndPoint + 'GEONAME,POP,DENSITY&for=state:' + parsedResponse.data[0].code)
         const censusStateJson = await censusState.json();
+        console.log(censusStateJson, '<----- state data working??');
         this.setState({
           //censusStateJson is an array that contains one dummy entry and one or more state entries, so we use [1]
           currentState: {
@@ -193,7 +196,8 @@ class App extends Component {
         </div>
         <div>
           <GameContainer />
-          <MapContainer />
+          <MapContainer 
+            currentState={this.state.currentState} geoSearch={this.geoSearch} />
         </div>
       </div>
     );

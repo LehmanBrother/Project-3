@@ -11,7 +11,9 @@ export class MapContainer extends Component {
       default: {
         lat: 41.8781,
         lng: 87.6298
-      }
+      },
+      searchText: '',
+      searchType: 'State'
     }
   }
   whatsUp = () => {
@@ -22,7 +24,7 @@ export class MapContainer extends Component {
     //some states have more than one array - this logic
     //should help parse them
     if(feature.geometry.coordinates.length > 1){
-      console.log('weird state:');
+      // console.log('weird state:');
       feature.geometry.coordinates.forEach((subArr) => {
         subArr.map((elem) => {
           let coordPair = {
@@ -41,10 +43,11 @@ export class MapContainer extends Component {
         coordinateArr.push(coordPair);
       });
     }
-    console.log(coordinateArr, '<------- getCoordinates ');
+    // console.log(coordinateArr, '<------- getCoordinates ');
     return coordinateArr
   }
-  getAllStatesCoordinates = async () => {
+  getAllStatesCoordinates = async (e) => {
+    // e.preventDefault();
     //coordinates are in an array of an array of an array
     //this converts them into an array of objects for each state
     const allStates = [];
@@ -72,20 +75,29 @@ export class MapContainer extends Component {
 
   //methods for the map
   
-  onMouseoverPolygon = (props, polygon, e) => {
-    console.log('mouseover of ', props.id, 'all data: ', props);
-    
+  updateSearch = (props, polygon) => {
+    console.log('mouseover of ', props.value, '_____all data: ', props);
+    this.setState({
+      [props.name]: props.value
+    });
+  }
+
+  searchState = (props, poly, e) => {
+    console.log(props, poly, e);
+    console.log(this.state.searchText, '_______search state');
+    this.props.geoSearch(this.state, e.va)
   }
   
   render() {
-    console.log(this.state.states, '<--------- all coords');
-    let shapeToRender
+    // console.log(this.state.states, '<--------- all coords');
+    let shapesToRender
     if (this.state.states.length){    
-      shapeToRender = this.state.states.map((state, i) => {
-        console.log(state.coords, '<---------', state.name);
+      shapesToRender = this.state.states.map((state, i) => {
+        // console.log(state.coords, '<---------', state.name);
         return (
           <Polygon
-            id={state.name}
+            name='searchText'
+            value={state.name}
             key={i}
             paths={state.coords}
             strokeColor="white"
@@ -93,7 +105,8 @@ export class MapContainer extends Component {
             strokeWeight={2}
             fillColor="white"
             fillOpacity={0} 
-            onMouseover={this.onMouseoverPolygon} />
+            onMouseover={this.updateSearch} 
+            onClick= {this.searchState} />
         )
       })
     }
@@ -105,7 +118,7 @@ export class MapContainer extends Component {
           initialCenter={{lat: 38, lng: -96}}
           zoom={4.3}
           style={{height: '450px', width: '825px'}}>
-            {shapeToRender}
+            {shapesToRender}
         </Map>
       </div>
     );
