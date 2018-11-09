@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
-<<<<<<< HEAD
 import { Grid, Button } from 'semantic-ui-react';
-=======
 import serverURL from '../env.js';
->>>>>>> 6cadddb0b6f1537fc7ec0338da2a53c5eb197c5e
 
 class QuestionContainer extends Component {
 	constructor(){
@@ -93,16 +90,16 @@ class QuestionContainer extends Component {
 		return(
 			<Grid.Column id="questionContainer">
 				<h3>Question</h3>
-				<p>{questionText}</p>
+				{this.state.questionAsked ? <p>{questionText}</p> : null}
 				<form onSubmit={this.getGeos}>
 					<select name='estimateOrComparison' value={this.state.estimateOrComparison} onChange={this.updateQuestion}>
 						<option>Estimate</option>
 						<option>Comparison</option>
-					</select>
+					</select><br/>
 					<select name='densityOrPop' value={this.state.densityOrPop} onChange={this.updateQuestion}>
 						<option>Population</option>
 						<option>Density</option>
-					</select>
+					</select><br/>
 					<select name='stateOrPlace' value={this.state.stateOrPlace} onChange={this.updateQuestion}>
 						<option>States Only</option>
 						<option>Cities Only</option>
@@ -110,14 +107,7 @@ class QuestionContainer extends Component {
 					</select>
 					<Button basic color='blue' id="button" type='Submit'>New Question</Button>
 				</form>
-<<<<<<< HEAD
 			</Grid.Column>
-=======
-				<h3>Question Container</h3>
-				<h5>Current Question:</h5>
-				{this.state.questionAsked ? <p>{questionText}</p> : null}
-			</span>
->>>>>>> 6cadddb0b6f1537fc7ec0338da2a53c5eb197c5e
 		)
 	}
 }
