@@ -107,6 +107,11 @@ class GameContainer extends Component {
 		} catch(err) {
 			console.log(err);
 		}
+		this.aggregateEstimates().then((avgPctDif) => {
+			this.setState({avgPctDif: avgPctDif})
+		}).catch((err) => {
+			console.log(err);
+		});
 	}
 	evaluateComparison = async (comparisonInput) => {
 		console.log('ec called');
@@ -146,6 +151,11 @@ class GameContainer extends Component {
 		} catch(err) {
 			console.log(err);
 		}
+		this.aggregateComparisons().then((pctCorrect) => {
+			this.setState({pctCorrect: pctCorrect})
+		}).catch((err) => {
+			console.log(err);
+		});
 	}
 	aggregateEstimates = async () => {
 		try {
