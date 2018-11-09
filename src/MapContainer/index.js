@@ -85,7 +85,7 @@ export class MapContainer extends Component {
   searchState = (props, poly, e) => {
     console.log(props, poly, e);
     console.log(this.state.searchText, '_______search state');
-    this.props.geoSearch(this.state.searchText, e.va)
+    this.props.geoSearch(this.state, e.va)
   }
   
   render() {

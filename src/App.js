@@ -50,7 +50,6 @@ class App extends Component {
   }
 
   geoSearch = async (search, e) => {
-    console.log("Here");
     e.preventDefault();
     await this.setState({
       showState: search.searchType === 'State'
