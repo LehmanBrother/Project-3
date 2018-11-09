@@ -3,6 +3,7 @@ import GameContainer from './GameContainer';
 import MapContainer from './MapContainer';
 import './App.css';
 // import apiKey from './apiKey.js'
+// import API_KEY from '..env';
 import StateContainer from './StateContainer';
 import SearchContainer from './SearchContainer';
 
@@ -49,11 +50,13 @@ class App extends Component {
   }
 
   geoSearch = async (search, e) => {
+    console.log("Here");
     e.preventDefault();
     await this.setState({
-      showState: search.searchType == 'State'
+      showState: search.searchType === 'State'
     });
     console.log(search.searchText, '<-------- search text pre-if-showstate');
+    console.log(this.state.showState, '<------ showState');
     if(this.state.showState) {
       try {
         const searchedGeo = await fetch('http://localhost:9000/api/v1/census/stateSearch/' + search.searchText);

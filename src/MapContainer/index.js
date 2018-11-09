@@ -24,7 +24,7 @@ export class MapContainer extends Component {
     //some states have more than one array - this logic
     //should help parse them
     if(feature.geometry.coordinates.length > 1){
-      console.log('weird state:');
+      // console.log('weird state:');
       feature.geometry.coordinates.forEach((subArr) => {
         subArr.map((elem) => {
           let coordPair = {
@@ -43,7 +43,7 @@ export class MapContainer extends Component {
         coordinateArr.push(coordPair);
       });
     }
-    console.log(coordinateArr, '<------- getCoordinates ');
+    // console.log(coordinateArr, '<------- getCoordinates ');
     return coordinateArr
   }
   getAllStatesCoordinates = async (e) => {
@@ -75,29 +75,25 @@ export class MapContainer extends Component {
 
   //methods for the map
   
-  getCensusData = async () => {
-    const censusData = await fetch('http://localhost:9000/api/v1/census');
-    console.log(censusData);
-  }
-
-  updateSearch = (props, polygon, e) => {
+  updateSearch = (props, polygon) => {
     console.log('mouseover of ', props.value, '_____all data: ', props);
     this.setState({
       [props.name]: props.value
     });
   }
 
-  updateState = (props, polygon, e) => {
-    console.log(this.state.searchType, this.state.searchText);
-    {this.props.geoSearch.bind(null, this.state)}
+  searchState = (props, poly, e) => {
+    console.log(props, poly, e);
+    console.log(this.state.searchText, '_______search state');
+    this.props.geoSearch(this.state.searchText, e.va)
   }
   
   render() {
-    console.log(this.state.states, '<--------- all coords');
-    let shapeToRender
+    // console.log(this.state.states, '<--------- all coords');
+    let shapesToRender
     if (this.state.states.length){    
-      shapeToRender = this.state.states.map((state, i) => {
-        console.log(state.coords, '<---------', state.name);
+      shapesToRender = this.state.states.map((state, i) => {
+        // console.log(state.coords, '<---------', state.name);
         return (
           <Polygon
             name='searchText'
@@ -110,24 +106,19 @@ export class MapContainer extends Component {
             fillColor="white"
             fillOpacity={0} 
             onMouseover={this.updateSearch} 
-            onClick={this.updateState} />
+            onClick= {this.searchState} />
         )
       })
     }
 
     return (
       <div className="map">
-      
-      <div className="display">
-
-      </div>
-
         <Map
           google={this.props.google} 
           initialCenter={{lat: 38, lng: -96}}
           zoom={4.3}
           style={{height: '450px', width: '825px'}}>
-            {shapeToRender}
+            {shapesToRender}
         </Map>
       </div>
     );
