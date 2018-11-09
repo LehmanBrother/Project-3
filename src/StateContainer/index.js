@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
+import { Button, Card } from 'semantic-ui-react';
 import CurrentStateContainer from '../CurrentStateContainer';
 import CurrentPlaceContainer from '../CurrentPlaceContainer';
+
+
 
 class StateContainer extends Component {
 	constructor(){
@@ -13,22 +16,26 @@ class StateContainer extends Component {
 		console.log(this.props, 'stc this.props');
 		const userStates = this.props.userStates.map((userState, i) => {
 			return (
-				<li key={userState._id}>
-					<h5>{userState.name}</h5>
-					<p>Population: {userState.pop}</p>
-					<p>Density: {Math.round(10*userState.density)/10}/sq mi</p>
-					<button onClick={this.props.deleteState.bind(null,userState._id)}>Delete State</button>
-				</li>
+				<Card key={userState._id}>
+					<Card.Content>
+						<Card.Header>{userState.name}</Card.Header>
+						<p>Population: {userState.pop}</p>
+						<p>Density: {Math.round(10*userState.density)/10}/sq mi</p>
+						<Button basic color='blue' id="button" onClick={this.props.deleteState.bind(null,userState._id)}>Delete State</Button>
+					</Card.Content>
+				</Card>
 			)
 		})
 		const userPlaces = this.props.userPlaces.map((userPlace, i) => {
 			return (
-				<li key={userPlace._id}>
-					<h5>{userPlace.name}</h5>
-					<p>Population: {userPlace.pop}</p>
-					<p>Density: {Math.round(10*userPlace.density)/10}/sq mi</p>
-					<button onClick={this.props.deletePlace.bind(null,userPlace._id)}>Delete City</button>
-				</li>
+				<Card key={userPlace._id}>
+					<Card.Content>
+						<Card.Header>{userPlace.name}</Card.Header>
+						<p>Population: {userPlace.pop}</p>
+						<p>Density: {Math.round(10*userPlace.density)/10}/sq mi</p>
+						<Button basic color='blue' id="button" onClick={this.props.deletePlace.bind(null,userPlace._id)}>Delete City</Button>
+					</Card.Content>
+				</Card>
 			)
 		})
 		return (
@@ -42,19 +49,17 @@ class StateContainer extends Component {
 						savePlace={this.props.savePlace}
 						 />
 						}
-				<h2>StateContainer</h2>
-				<div>
-					<h3>Saved States</h3>
-					<ul>
+				<h2>Saved States</h2>
+				<div className="userSaved">
+					<Card.Group>
 						{userStates}
-					</ul>
+					</Card.Group>
 				</div>
-				<h2>PlaceContainer</h2>
-				<div>
-					<h3>Saved Cities</h3>
-					<ul>
+				<h2>Saved Cities</h2>
+				<div className="userSaved">
+					<Card.Group>
 						{userPlaces}
-					</ul>
+					</Card.Group>
 				</div>
 			</div>
 		)

@@ -1,4 +1,6 @@
 import React from 'react';
+import { Button } from 'semantic-ui-react';
+
 
 const ComparisonInput = (props) => {
 	return (
@@ -7,7 +9,7 @@ const ComparisonInput = (props) => {
 				<option>Geo 1</option>
 				<option>Geo 2</option>
 			</select>
-			<button type='submit'>Submit Answer</button>
+			<Button basic color='blue' id="button" type='submit'>Submit Answer</Button>
 		</form>
 	)
 }

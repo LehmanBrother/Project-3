@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import QuestionContainer from '../QuestionContainer';
 import AnswerContainer from '../AnswerContainer';
+import { Grid } from 'semantic-ui-react';
+
 
 class GameContainer extends Component {
 	constructor(){
@@ -182,19 +184,7 @@ class GameContainer extends Component {
 	render(){
 
 		return(
-			<div id="gameContainer">
-				<span className="gameSpan">
-					<h3>GameContainer</h3>
-					{this.state.questionAnswered ?
-						<label>
-							<p>Correct answer: {this.state.correctAnswer}</p>
-							<p>Difference: {this.state.currentPctDif}%</p>
-						</label> :
-						<p>Result will appear here</p>
-					}
-					<p>Percent Correct: {Math.round(1000*this.state.pctCorrect)/10}%</p>
-					<p>Average Estimate Variance: {Math.round(10*this.state.avgPctDif)/10}%</p>
-				</span>
+			<Grid columns='equal' id="gameContainer">
 				<QuestionContainer
 					editAnswerContainer={this.editAnswerContainer}
 					updateQuestionGeos={this.updateQuestionGeos} />
@@ -202,7 +192,19 @@ class GameContainer extends Component {
 					estimateOrComparison={this.state.estimateOrComparison}
 					evaluateEstimate={this.evaluateEstimate}
 					evaluateComparison={this.evaluateComparison} />
-			</div>
+				<Grid.Column id="gameSpan">
+					<h3>Your Score</h3>
+					{this.state.questionAnswered ?
+						<label>
+							<p>Correct answer: {this.state.correctAnswer}</p>
+							<p>Difference: {this.state.currentPctDif}%</p>
+						</label> :
+						<div id="blankAnswer"></div>
+					}
+					<p>Percent Correct: {Math.round(1000*this.state.pctCorrect)/10}%</p>
+					<p>Average Estimate Variance: {Math.round(10*this.state.avgPctDif)/10}%</p>
+				</Grid.Column>				
+			</Grid>
 		)
 	}
 }

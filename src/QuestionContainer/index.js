@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Grid, Button } from 'semantic-ui-react';
 
 class QuestionContainer extends Component {
 	constructor(){
@@ -92,7 +93,9 @@ class QuestionContainer extends Component {
 			questionText = questionPart1 + this.state.geo1.name + ' or (2)' + this.state.geo2.name + '?';
 		}
 		return(
-			<span className="gameSpan" id="questionContainer">
+			<Grid.Column id="questionContainer">
+				<h3>Question</h3>
+				<p>{questionText}</p>
 				<form onSubmit={this.getGeos}>
 					<select name='estimateOrComparison' value={this.state.estimateOrComparison} onChange={this.updateQuestion}>
 						<option>Estimate</option>
@@ -107,12 +110,9 @@ class QuestionContainer extends Component {
 						<option>Cities Only</option>
 						<option>States and Cities</option>
 					</select>
-					<button type='Submit'>Get New Question</button>
+					<Button basic color='blue' id="button" type='Submit'>New Question</Button>
 				</form>
-				<h3>Question Container</h3>
-				<h5>Current Question:</h5>
-				<p>{questionText}</p>
-			</span>
+			</Grid.Column>
 		)
 	}
 }

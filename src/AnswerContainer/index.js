@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Grid } from 'semantic-ui-react';
 import EstimateInput from '../EstimateInput';
 import ComparisonInput from '../ComparisonInput';
 
@@ -36,9 +37,8 @@ class AnswerContainer extends Component {
 			estimateInputModal = false
 		}
 		return(
-			<span className="gameSpan" id="answerContainer">
-				<p>Answer Container</p>
-				<p>{this.props.estimateOrComparison}</p>
+			<Grid.Column id="answerContainer">
+				<h3>Your Answer</h3>
 				{estimateInputModal ? 
 					<EstimateInput
 						estimateInput={this.state.estimateInput}
@@ -50,7 +50,7 @@ class AnswerContainer extends Component {
 						submitComparison={this.submitComparison}
 					/>
 				}
-			</span>
+			</Grid.Column>
 		)
 	}
 }

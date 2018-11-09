@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import { Button } from 'semantic-ui-react';
+
 
 class SearchContainer extends Component {
 	constructor(){
@@ -30,7 +32,7 @@ class SearchContainer extends Component {
 						Search: 
 						<input type='text' name='searchText' value={this.state.searchText} onChange={this.updateSearch}/>
 					</label><br/>
-					<button type='Submit'>Search</button>
+					<Button basic color='blue' id="button" type='Submit'>Search</Button>
 				</form>
 			</div>
 		)

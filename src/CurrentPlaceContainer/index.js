@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Button } from 'semantic-ui-react';
 
 class CurrentPlaceContainer extends Component {
 	constructor() {
@@ -16,15 +17,14 @@ class CurrentPlaceContainer extends Component {
 					<p>Population: {place.pop}</p>
 					<p>Density: {Math.round(10*place.density)/10}/sq mi</p>
 					<form onSubmit={this.props.savePlace.bind(null,place)}>
-						<button type='Submit'>Save City</button>
+						<Button basic color='blue' id="button" type='Submit'>Save City</Button>
 					</form>
 				</li>
 			)
 		})
 		return (
 			<div>
-				<h3>CurrentPlaceContainer</h3>
-				<p>Current Cities:</p>
+				<h3>Current Place</h3>
 				<ul>
 					{currentPlaces}
 				</ul>

@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import GameContainer from './GameContainer';
 import MapContainer from './MapContainer';
 import './App.css';
-// import apiKey from './apiKey.js'
-// import API_KEY from '..env';
 import StateContainer from './StateContainer';
 import SearchContainer from './SearchContainer';
+import { Grid } from 'semantic-ui-react';
 
 const baseEndPoint = 'https://api.census.gov/data/2017/pep/population?get='
 
@@ -180,26 +179,31 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <div id="textContainer">
-          <StateContainer
-            currentState={this.state.currentState}
-            currentPlaces={this.state.currentPlaces}
-            showState={this.state.showState}
-            userStates={this.state.userStates}
-            userPlaces={this.state.userPlaces}
-            saveState={this.saveState}
-            savePlace={this.savePlace}
-            deleteState={this.deleteState}
-            deletePlace={this.deletePlace} />
-          <SearchContainer geoSearch={this.geoSearch} />
-        </div>
-        <div>
-          <GameContainer />
-          <MapContainer 
-            currentState={this.state.currentState} geoSearch={this.geoSearch} />
-        </div>
-      </div>
+      <Grid className="App">
+        <Grid.Row columns={1} id="title">
+          <h1>Mapulate</h1>
+        </Grid.Row>
+        <Grid.Row columns={2} id="textContainer">
+          <Grid.Column width={3}>
+            <StateContainer
+              currentState={this.state.currentState}
+              currentPlaces={this.state.currentPlaces}
+              showState={this.state.showState}
+              userStates={this.state.userStates}
+              userPlaces={this.state.userPlaces}
+              saveState={this.saveState}
+              savePlace={this.savePlace}
+              deleteState={this.deleteState}
+              deletePlace={this.deletePlace} />
+            <SearchContainer geoSearch={this.geoSearch} />
+          </Grid.Column>
+          <Grid.Column width={9} id="rightContainer">
+            <GameContainer />
+            <MapContainer 
+              currentState={this.state.currentState} geoSearch={this.geoSearch} />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     );
   }
 }
