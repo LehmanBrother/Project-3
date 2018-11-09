@@ -3,14 +3,7 @@ import CurrentStateContainer from '../CurrentStateContainer';
 import CurrentPlaceContainer from '../CurrentPlaceContainer';
 
 class StateContainer extends Component {
-	constructor(){
-		super();
-		this.state = {
-
-		}
-	}
 	render(){
-		console.log(this.props, 'stc this.props');
 		const userStates = this.props.userStates.map((userState, i) => {
 			return (
 				<li key={userState._id}>

@@ -5,6 +5,7 @@ class QuestionContainer extends Component {
 	constructor(){
 		super();
 		this.state = {
+			questionAsked: false,
 			estimateOrComparison: 'Estimate',
 			densityOrPop: 'Population',
 			stateOrPlace: 'States Only',
@@ -21,12 +22,10 @@ class QuestionContainer extends Component {
 	getGeos = async (e) => {
 		//based on user selection, return geo or geo1 and geo2
 		e.preventDefault();
-		console.log('getGeos called');
 		if(this.state.stateOrPlace === 'States Only') {
 			try {
 				const randStates = await fetch(serverURL + '/api/v1/census/question/state');
 				const randStatesJson = await randStates.json();
-				console.log(randStatesJson.data);
 				if(this.state.estimateOrComparison === 'Estimate') {
 					this.setState({
 						geo: randStatesJson.data[0]
@@ -37,7 +36,6 @@ class QuestionContainer extends Component {
 						geo2: randStatesJson.data[1]
 					})
 				}
-				console.log(this.state);
 				this.props.editAnswerContainer(this.state);
 				this.props.updateQuestionGeos(this.state.geo, this.state.geo1, this.state.geo2);
 			} catch(err) {
@@ -47,7 +45,6 @@ class QuestionContainer extends Component {
 			try {
 				const randPlaces = await fetch(serverURL + '/api/v1/census/question/place');
 				const randPlacesJson = await randPlaces.json();
-				console.log(randPlacesJson.data);
 				if(this.state.estimateOrComparison === 'Estimate') {
 					this.setState({
 						geo: randPlacesJson.data[0]
@@ -58,16 +55,13 @@ class QuestionContainer extends Component {
 						geo2: randPlacesJson.data[1]
 					})
 				}
-				console.log(this.state);
 				this.props.editAnswerContainer(this.state);
 				this.props.updateQuestionGeos(this.state.geo, this.state.geo1, this.state.geo2);
 			} catch(err) {
 				console.log(err);
 			}
 		}
-	}
-	componentDidMount(){
-		//
+		this.setState({questionAsked: true})
 	}
 	render(){
 		let questionType1 = this.state.estimateOrComparison;
@@ -112,7 +106,7 @@ class QuestionContainer extends Component {
 				</form>
 				<h3>Question Container</h3>
 				<h5>Current Question:</h5>
-				<p>{questionText}</p>
+				{this.state.questionAsked ? <p>{questionText}</p> : null}
 			</span>
 		)
 	}

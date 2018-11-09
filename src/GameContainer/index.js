@@ -22,13 +22,14 @@ class GameContainer extends Component {
 			pctCorrect: null,
 		}
 	}
+	//structures question container based on type of current question
 	editAnswerContainer = (questionState) => {
-		console.log(questionState, 'qs');
 		this.setState({
 			estimateOrComparison: questionState.estimateOrComparison,
 			densityOrPop: questionState.densityOrPop
 		})
 	}
+	//assigns state variables based on random geos
 	updateQuestionGeos = (geo, geo1, geo2) => {
 		this.setState({
 			questionGeo: geo,
@@ -66,23 +67,20 @@ class GameContainer extends Component {
 				lowerValGeo: lowerValGeo
 			})
 		}
-		console.log(this.state, 'uqg state');
 	}
+	//evaluates user answers to estimate questions
 	evaluateEstimate = async (userEstimate) => {
-		console.log('ee called');
 		let pctDif;
 		if(this.state.densityOrPop === 'Population') {
 			pctDif = Math.round(1000*Math.abs(this.state.questionGeo.pop - userEstimate)/this.state.questionGeo.pop)/10
 			await this.setState({
 				correctAnswer: this.state.questionGeo.pop
 			})
-			console.log(this.state.currentPctDif, 'tscpd');
 		} else if(this.state.densityOrPop === 'Density') {
 			pctDif = Math.round(1000*Math.abs(this.state.questionGeo.density - userEstimate)/this.state.questionGeo.density)/10
 			await this.setState({
 				correctAnswer: Math.round(10*this.state.questionGeo.density)/10
 			})
-			console.log(this.state.currentPctDif, 'tscpd');
 		}
 		await this.setState({
 			currentPctDif: pctDif,
@@ -90,7 +88,7 @@ class GameContainer extends Component {
 		});
 		//call answer post route
 		try {
-			const newAnswer = await fetch(serverURL + '/api/v1/census/answer', {
+			/*const newAnswer = */await fetch(serverURL + '/api/v1/census/answer', {
 				method: 'POST',
 				body: JSON.stringify({
 					type: this.state.estimateOrComparison,
@@ -102,8 +100,7 @@ class GameContainer extends Component {
 					'Content-Type': 'application/json'
 				}
 			})
-			const parsedResponse = await newAnswer.json();
-			console.log(parsedResponse, 'parsedResponse');
+			//const parsedResponse = await newAnswer.json();
 		} catch(err) {
 			console.log(err);
 		}
@@ -113,8 +110,8 @@ class GameContainer extends Component {
 			console.log(err);
 		});
 	}
+	//evaluates user answers to comparison questions
 	evaluateComparison = async (comparisonInput) => {
-		console.log('ec called');
 		let pctDif;
 		let isCorrect;
 		if(this.state.densityOrPop === 'Population') {
@@ -134,7 +131,7 @@ class GameContainer extends Component {
 		})
 		//call answer post route
 		try {
-			const newAnswer = await fetch(serverURL + '/api/v1/census/answer', {
+			/*const newAnswer = */await fetch(serverURL + '/api/v1/census/answer', {
 				method: 'POST',
 				body: JSON.stringify({
 					type: this.state.estimateOrComparison,
@@ -146,8 +143,7 @@ class GameContainer extends Component {
 					'Content-Type': 'application/json'
 				}
 			})
-			const parsedResponse = await newAnswer.json();
-			console.log(parsedResponse, 'parsedResponse');
+			//const parsedResponse = await newAnswer.json();
 		} catch(err) {
 			console.log(err);
 		}
@@ -157,28 +153,28 @@ class GameContainer extends Component {
 			console.log(err);
 		});
 	}
+	//calls estimate aggregation route
 	aggregateEstimates = async () => {
 		try {
 			const estAgg = await fetch(serverURL + '/api/v1/census/answer/est');
 			const estAggJson = await estAgg.json();
-			console.log(estAggJson.data[0].avgPctDif, 'apd');
 			return estAggJson.data[0].avgPctDif;
 		} catch(err) {
 			console.log(err);
 		}
 	}
+	//calls comparison aggregation route
 	aggregateComparisons = async () => {
 		try {
 			const compAgg = await fetch(serverURL + '/api/v1/census/answer/comp');
 			const compAggJson = await compAgg.json();
-			console.log(compAggJson.data[0].pctCorrect, 'ac');
 			return compAggJson.data[0].pctCorrect;
 		} catch(err) {
 			console.log(err);
 		}
 	}
 	componentDidMount(){
-		//call answer aggregator, set state accordingly
+		//call answer aggregators, set state accordingly
 		this.aggregateEstimates().then((avgPctDif) => {
 			this.setState({avgPctDif: avgPctDif})
 		}).catch((err) => {

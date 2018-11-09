@@ -39,7 +39,6 @@ class App extends Component {
   //add getUserPlaces
   getUserPlaces = async () => {
     try {
-      console.log('getUserPlaces called');
       const userPlaces = await fetch(serverURL + '/api/v1/census/places');
       const userPlacesJson = await userPlaces.json();
       return userPlacesJson.data;
@@ -48,20 +47,18 @@ class App extends Component {
     }
   }
 
+  //searches for relevant geography based on showState
   geoSearch = async (search, e) => {
     e.preventDefault();
     await this.setState({
       showState: search.searchType === 'State'
     });
-    console.log(search.searchText, '<-------- search text pre-if-showstate');
-    console.log(this.state.showState, '<------ showState');
     if(this.state.showState) {
       try {
         const searchedGeo = await fetch(serverURL + '/api/v1/census/stateSearch/' + search.searchText);
         const parsedResponse = await searchedGeo.json();
         const censusState = await fetch(baseEndPoint + 'GEONAME,POP,DENSITY&for=state:' + parsedResponse.data[0].code)
         const censusStateJson = await censusState.json();
-        console.log(censusStateJson, '<----- state data working??');
         this.setState({
           //censusStateJson is an array that contains one dummy entry and one or more state entries, so we use [1]
           currentState: {
@@ -88,6 +85,7 @@ class App extends Component {
     }
   }
 
+  //saves a user state
   saveState = async (e) => {
     //calls state post route
     e.preventDefault();
@@ -109,6 +107,7 @@ class App extends Component {
     }
   }
 
+  //saves a user place
   savePlace = async (place, e) => {
     e.preventDefault();
     try {
@@ -129,12 +128,13 @@ class App extends Component {
     }
   }
 
+  //deletes a user state
   deleteState = async (id) => {
     try {
-      const deletedState = await fetch(serverURL + '/api/v1/census/state/' + id, {
+      /*const deletedState = */await fetch(serverURL + '/api/v1/census/state/' + id, {
         method: 'DELETE'
       });
-      const deletedStateJson = await deletedState.json();
+      //const deletedStateJson = await deletedState.json();
       const updatedStateList = this.state.userStates.filter((el) => {
         return el._id !== id
       })
@@ -146,12 +146,13 @@ class App extends Component {
     }
   }
 
+  //deletes a use place
   deletePlace = async (id) => {
     try {
-      const deletedPlace = await fetch(serverURL + '/api/v1/census/place/' + id, {
+      /*const deletedPlace = */await fetch(serverURL + '/api/v1/census/place/' + id, {
         method: 'DELETE'
       });
-      const deletedPlaceJson = await deletedPlace.json();
+      //const deletedPlaceJson = await deletedPlace.json();
       const updatedPlaceList = this.state.userPlaces.filter((el) => {
         return el._id !== id
       });
@@ -163,9 +164,8 @@ class App extends Component {
     }
   }
 
+  //loads user states and places when page loads
   componentDidMount(){
-    console.log(serverURL, 'expressURL');
-    console.log(this.state, 'cdm');
     this.getUserStates().then((userStates) => {
       this.setState({userStates: userStates})
     }).catch((err) => {
