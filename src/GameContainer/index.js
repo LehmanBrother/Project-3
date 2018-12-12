@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import QuestionContainer from '../QuestionContainer';
 import AnswerContainer from '../AnswerContainer';
 import { Grid } from 'semantic-ui-react';
-
-import serverURL from '../env.js';
+// import serverURL from '../env.js';
+import apiUrl from '../apiUrl';
 
 class GameContainer extends Component {
 	constructor(){
@@ -90,7 +90,7 @@ class GameContainer extends Component {
 		});
 		//call answer post route
 		try {
-			/*const newAnswer = */await fetch(serverURL + '/api/v1/census/answer', {
+			/*const newAnswer = */await fetch(apiUrl + 'api/v1/census/answer', {
 				method: 'POST',
 				body: JSON.stringify({
 					type: this.state.estimateOrComparison,
@@ -133,7 +133,7 @@ class GameContainer extends Component {
 		})
 		//call answer post route
 		try {
-			/*const newAnswer = */await fetch(serverURL + '/api/v1/census/answer', {
+			/*const newAnswer = */await fetch(apiUrl + 'api/v1/census/answer', {
 				method: 'POST',
 				body: JSON.stringify({
 					type: this.state.estimateOrComparison,
@@ -158,7 +158,7 @@ class GameContainer extends Component {
 	//calls estimate aggregation route
 	aggregateEstimates = async () => {
 		try {
-			const estAgg = await fetch(serverURL + '/api/v1/census/answer/est');
+			const estAgg = await fetch(apiUrl + 'api/v1/census/answer/est');
 			const estAggJson = await estAgg.json();
 			return estAggJson.data[0].avgPctDif;
 		} catch(err) {
@@ -168,7 +168,7 @@ class GameContainer extends Component {
 	//calls comparison aggregation route
 	aggregateComparisons = async () => {
 		try {
-			const compAgg = await fetch(serverURL + '/api/v1/census/answer/comp');
+			const compAgg = await fetch(apiUrl + 'api/v1/census/answer/comp');
 			const compAggJson = await compAgg.json();
 			return compAggJson.data[0].pctCorrect;
 		} catch(err) {

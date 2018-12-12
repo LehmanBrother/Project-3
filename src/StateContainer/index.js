@@ -18,7 +18,7 @@ class StateContainer extends Component {
 					</Card.Content>
 				</Card>
 			)
-		})
+		}) || null;
 		const userPlaces = this.props.userPlaces.map((userPlace, i) => {
 			return (
 				<Card key={userPlace._id}>
@@ -30,7 +30,7 @@ class StateContainer extends Component {
 					</Card.Content>
 				</Card>
 			)
-		})
+		}) || null;
 		return (
 			<div>
 				{this.props.showState ?

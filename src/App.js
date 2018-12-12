@@ -5,7 +5,8 @@ import './App.css';
 import StateContainer from './StateContainer';
 import SearchContainer from './SearchContainer';
 import { Grid } from 'semantic-ui-react';
-import serverURL from './env.js';
+// import serverURL from './env.js';
+import apiUrl from './apiUrl';
 
 const baseEndPoint = 'https://api.census.gov/data/2017/pep/population?get='
 
@@ -29,7 +30,7 @@ class App extends Component {
   //gets all states + relevant info for intiial seed
   getUserStates = async () => {
     try {
-      const userStates = await fetch(serverURL + '/api/v1/census/states');
+      const userStates = await fetch(apiUrl + 'api/v1/census/states');
       const userStatesJson = await userStates.json();
       return userStatesJson.data;
     } catch(err) {
@@ -40,7 +41,7 @@ class App extends Component {
   //add getUserPlaces
   getUserPlaces = async () => {
     try {
-      const userPlaces = await fetch(serverURL + '/api/v1/census/places');
+      const userPlaces = await fetch(apiUrl + 'api/v1/census/places');
       const userPlacesJson = await userPlaces.json();
       return userPlacesJson.data;
     } catch(err) {
@@ -56,7 +57,7 @@ class App extends Component {
     });
     if(this.state.showState) {
       try {
-        const searchedGeo = await fetch(serverURL + '/api/v1/census/stateSearch/' + search.searchText);
+        const searchedGeo = await fetch(apiUrl + 'api/v1/census/stateSearch/' + search.searchText);
         const parsedResponse = await searchedGeo.json();
         const censusState = await fetch(baseEndPoint + 'GEONAME,POP,DENSITY&for=state:' + parsedResponse.data[0].code)
         const censusStateJson = await censusState.json();
@@ -74,7 +75,7 @@ class App extends Component {
       }
     } else {
       try {
-        const searchedGeo = await fetch(serverURL + '/api/v1/census/placeSearch/' + search.searchText);
+        const searchedGeo = await fetch(apiUrl + 'api/v1/census/placeSearch/' + search.searchText);
         const parsedResponse = await searchedGeo.json();
         this.setState({
           //array of all matching places
@@ -91,7 +92,7 @@ class App extends Component {
     //calls state post route
     e.preventDefault();
     try {
-      const savedState = await fetch(serverURL + '/api/v1/census/state', {
+      const savedState = await fetch(apiUrl + 'api/v1/census/state', {
         method: 'POST',
         body: JSON.stringify(this.state.currentState),
         credentials: 'include',
@@ -112,7 +113,7 @@ class App extends Component {
   savePlace = async (place, e) => {
     e.preventDefault();
     try {
-      const savedPlace = await fetch(serverURL + '/api/v1/census/place', {
+      const savedPlace = await fetch(apiUrl + 'api/v1/census/place', {
         method: 'POST',
         body: JSON.stringify(place),
         credentials: 'include',
@@ -132,7 +133,7 @@ class App extends Component {
   //deletes a user state
   deleteState = async (id) => {
     try {
-      /*const deletedState = */await fetch(serverURL + '/api/v1/census/state/' + id, {
+      /*const deletedState = */await fetch(apiUrl + 'api/v1/census/state/' + id, {
         method: 'DELETE'
       });
       //const deletedStateJson = await deletedState.json();
@@ -150,7 +151,7 @@ class App extends Component {
   //deletes a use place
   deletePlace = async (id) => {
     try {
-      /*const deletedPlace = */await fetch(serverURL + '/api/v1/census/place/' + id, {
+      /*const deletedPlace = */await fetch(apiUrl + 'api/v1/census/place/' + id, {
         method: 'DELETE'
       });
       //const deletedPlaceJson = await deletedPlace.json();

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Grid, Button } from 'semantic-ui-react';
-import serverURL from '../env.js';
+// import serverURL from '../env.js';
+import apiUrl from '../apiUrl';
 
 class QuestionContainer extends Component {
 	constructor(){
@@ -25,7 +26,7 @@ class QuestionContainer extends Component {
 		e.preventDefault();
 		if(this.state.stateOrPlace === 'States Only') {
 			try {
-				const randStates = await fetch(serverURL + '/api/v1/census/question/state');
+				const randStates = await fetch(apiUrl + 'api/v1/census/question/state');
 				const randStatesJson = await randStates.json();
 				if(this.state.estimateOrComparison === 'Estimate') {
 					this.setState({
@@ -44,7 +45,7 @@ class QuestionContainer extends Component {
 			}
 		} else if(this.state.stateOrPlace === 'Cities Only') {
 			try {
-				const randPlaces = await fetch(serverURL + '/api/v1/census/question/place');
+				const randPlaces = await fetch(apiUrl + 'api/v1/census/question/place');
 				const randPlacesJson = await randPlaces.json();
 				if(this.state.estimateOrComparison === 'Estimate') {
 					this.setState({
